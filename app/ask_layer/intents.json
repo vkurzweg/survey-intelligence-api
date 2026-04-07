@@ -1,0 +1,169 @@
+{
+  "provider_perception": {
+    "description": "For a single brand, return Q24 attribute ratings vs the all-brand field average. Shows where the brand leads or trails the competitive set on each of the 12 perceptions dimensions.",
+    "template": "attribute_unwind",
+    "template_params": { "mode": "gap_vs_field" },
+    "collection": "respondents",
+    "stakeholders": ["marketing", "strategy"],
+    "query_source": "Q5-B",
+    "default_params": {
+      "focus_brand":             "Cognizant",
+      "competitor_brand":        null,
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null
+    },
+    "required_params": [],
+    "base_note": "Shown base only. Only answered Q24 attribute ratings included. Field average spans all 16 brands with shown responses.",
+    "scale_note": "focus_avg and field_avg: direct –3..+3 scale. gap_vs_field: positive = brand leads field average. Sorted by gap descending (strengths first)."
+  },
+
+  "provider_comparison": {
+    "description": "Head-to-head Q24 attribute rating between a focus brand and one named competitor. Returns gap per attribute (focus minus competitor).",
+    "template": "attribute_unwind",
+    "template_params": { "mode": "ratings" },
+    "collection": "respondents",
+    "stakeholders": ["strategy", "sales"],
+    "query_source": "Q3-C, Q5-C",
+    "default_params": {
+      "focus_brand":             "Cognizant",
+      "competitor_brand":        null,
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null
+    },
+    "required_params": ["competitor_brand"],
+    "base_note": "Shown base only. Only answered Q24 attribute ratings included. Both brands must have been shown to the respondent.",
+    "scale_note": "gap: focus_avg minus competitor_avg. Positive = focus brand leads on that attribute. Sorted by attribute_idx."
+  },
+
+  "provider_momentum": {
+    "description": "For all brands, compute the delta between current-period TSP rating (Q1) and 2-year-future TSP rating (Q3). Positive momentum = buyers expect improvement.",
+    "template": "performance_trajectory",
+    "template_params": {},
+    "collection": "respondents",
+    "stakeholders": ["strategy"],
+    "query_source": "Q1-C",
+    "default_params": {
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null
+    },
+    "required_params": [],
+    "base_note": "Shown base only. Respondents must have answered both tsp_rating_now and tsp_rating_2yrs_future.",
+    "scale_note": "avg_rating_now and avg_rating_future: code 1–7 maps to labels –3..+3. momentum is the delta in code units. Sorted by momentum descending."
+  },
+
+  "segment_profile": {
+    "description": "For a single brand, break down purchase intent (Q27) across one profile dimension. Set segment_by to one of: industry, emp_count, seniority, maturity_band, decision_involvement.",
+    "template": "brand_segment_metric",
+    "template_params": { "market_compare": false, "current_user_split": false },
+    "collection": "respondents",
+    "stakeholders": ["sales", "marketing"],
+    "query_source": "Q2-A, Q2-C, Q2-D",
+    "default_params": {
+      "focus_brand":             "Cognizant",
+      "segment_by":              "industry",
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null,
+      "high_intent_threshold":   5
+    },
+    "required_params": ["segment_by"],
+    "base_note": "Shown base only. Only answered purchase_intent responses included.",
+    "scale_note": "avg_intent_code: 1–6 (labels 0–5). pct_high_intent: % with code >= high_intent_threshold (default 5, labels 4 or 5-Almost certainly). Sorted by avg_intent_code descending."
+  },
+
+  "segment_difference": {
+    "description": "Compare focus brand purchase intent vs the market average across one profile dimension. Shows where the brand over- or under-indexes.",
+    "template": "brand_segment_metric",
+    "template_params": { "market_compare": true, "current_user_split": false },
+    "collection": "respondents",
+    "stakeholders": ["strategy", "sales"],
+    "query_source": "Q2-B, Q1-B",
+    "default_params": {
+      "focus_brand":             "Cognizant",
+      "segment_by":              "emp_count",
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null,
+      "high_intent_threshold":   5
+    },
+    "required_params": ["segment_by"],
+    "base_note": "Shown base only. Market average is the mean of all brand avg_intent_code values within the segment, not weighted by shown count.",
+    "scale_note": "gap: focus_avg minus market_avg in code units. Positive = focus brand outperforms field in this segment. Sorted by gap descending."
+  },
+
+  "unmet_needs": {
+    "description": "Return Q17 unmet-needs verbatims matching segment and keyword filters. Sorted by char_count descending (richest responses first).",
+    "template": "verbatim_fetch",
+    "template_params": {},
+    "collection": "verbatims",
+    "stakeholders": ["marketing", "strategy", "product"],
+    "query_source": "Q4-A, Q4-D",
+    "default_params": {
+      "segment_industry_codes":  null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "keyword":                 null,
+      "limit":                   50
+    },
+    "required_params": [],
+    "base_note": "Q17_UnmetNeeds verbatims only (one per respondent). analysis.themes and analysis.sentiment are null until NLP pass runs.",
+    "scale_note": "ai_maturity_code: 1–10. word_count and char_count are raw text metrics."
+  },
+
+  "target_list": {
+    "description": "Return anonymised respondent profiles showing high purchase intent for focus_brand. Set competitor_brand to filter to current users of that competitor (displacement targeting).",
+    "template": "respondent_list",
+    "template_params": {},
+    "collection": "respondents",
+    "stakeholders": ["sales"],
+    "query_source": "Q1-A",
+    "default_params": {
+      "focus_brand":             "Cognizant",
+      "competitor_brand":        null,
+      "high_intent_threshold":   5,
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null,
+      "limit":                   50
+    },
+    "required_params": [],
+    "base_note": "No PII. respondent_uuid is a random survey panel identifier. is_current_user reflects S9 code=1 for the focus_brand.",
+    "scale_note": "purchase_intent_code: 1–6 (labels 0–5). Sorted by purchase_intent_code descending."
+  },
+
+  "white_space": {
+    "description": "Return not-answered rate by brand and attribute among shown respondents. High rates indicate attributes no brand has yet claimed in buyers' minds — perception opportunities.",
+    "template": "attribute_unwind",
+    "template_params": { "mode": "uncertainty" },
+    "collection": "respondents",
+    "stakeholders": ["strategy", "marketing"],
+    "query_source": "Q5-D",
+    "default_params": {
+      "focus_brand":             null,
+      "competitor_brand":        null,
+      "segment_industry_codes":  null,
+      "segment_emp_codes":       null,
+      "segment_seniority_codes": null,
+      "maturity_min":            null,
+      "maturity_max":            null
+    },
+    "required_params": [],
+    "base_note": "Shown base only. pct_not_answered includes only respondents who saw the brand (shown=true) but did not answer the attribute. Excludes not_shown.",
+    "scale_note": "pct_not_answered: 0–100. Sorted descending. High value = unclaimed perception space."
+  }
+}

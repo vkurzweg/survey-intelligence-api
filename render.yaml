@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: survey-intelligence-api
+    runtime: docker
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        sync: false
