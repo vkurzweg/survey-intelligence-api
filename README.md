@@ -1,6 +1,23 @@
-# survey-intelligence-api
+# Survey Intelligence API (InsightOps)
 
-A standalone FastAPI service that exposes the survey intelligence ask-layer as a REST API. It connects to a MongoDB database of survey respondents, verbatims, and codebook data, and returns structured JSON responses for a set of named analytical intents.
+A small FastAPI service for working with enterprise AI survey data.
+
+The goal is simple: make the data usable.
+
+This sits between the raw survey and the work that depends on it—analysis, charts, decks—so the same question returns the same answer, every time, and can be traced back to the underlying data.
+
+---
+
+## Overview
+
+This allows you to:
+
+- Run the same analysis consistently (instead of rebuilding it in Excel)
+- Tie outputs directly back to survey questions and data
+- Reuse common patterns (brand comparisons, segmentation)
+- Produce outputs that drop cleanly into decks and briefs
+
+Insights should be consistent, explainable and traceable back to the data.
 
 ---
 
@@ -28,6 +45,47 @@ survey-intelligence-api/
 ├── render.yaml
 └── requirements.txt
 ```
+---
+
+## Data model (high level)
+
+Each respondent includes:
+
+- **Profile**  
+  Industry, company size, seniority
+
+- **Brand awareness**  
+  Familiarity and usage across providers
+
+- **Brand scores (per brand)**  
+  - performance ratings (Q1–Q3)  
+  - category perception (Q20)  
+  - attribute ratings (Q24)  
+  - rankings over time (Q25–Q26)  
+  - purchase intent (Q27)
+
+- **Verbatims**  
+  Open-ended responses with source tracking
+
+---
+
+## Additional data outputs
+
+In addition to the core dataset, this repo includes a set of derived files used for analysis:
+
+- `brand_words.csv`  
+  Terms most associated with each brand
+
+- `corpus_words.csv`  
+  Overall language patterns across all responses
+
+- `brand_salience.csv`  
+  Relative visibility and association strength by brand
+
+- `response_tiers.csv`  
+  Groupings used to segment respondents for analysis
+
+These are working files — used to support analysis, not treated as source data.
 
 ---
 
@@ -44,29 +102,6 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 ```
-
----
-
-## Environment variables
-
-Create a `.env` file at the project root (never committed):
-
-```bash
-MONGODB_URI=mongodb://localhost:27017
-MONGODB_DB=survey_intelligence
-```
-
-For MongoDB Atlas:
-
-```bash
-MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/
-MONGODB_DB=survey_intelligence
-```
-
-| Variable | Required | Description |
-|---|---|---|
-| `MONGODB_URI` | Yes | Full MongoDB connection string |
-| `MONGODB_DB` | Yes | Database name to connect to |
 
 ---
 
@@ -112,20 +147,6 @@ mongosh "$MONGODB_URI" --file scripts/verify_import.js
 
 ---
 
-## How to deploy to Render
-
-1. Push this repo to GitHub.
-2. In the Render dashboard: **New → Web Service → connect your repo**.
-3. Render will detect `render.yaml` automatically and use the `Dockerfile`.
-4. Go to **Environment** and set the two secret variables:
-   - `MONGODB_URI` — your Atlas connection string
-   - `MONGODB_DB` — your database name
-5. Deploy.
-
-Render injects `PORT` automatically; the Dockerfile reads it via `$PORT`.
-
----
-
 ## Example API usage
 
 ### Check health
@@ -143,7 +164,6 @@ curl http://localhost:8000/health
 curl http://localhost:8000/intents
 ```
 
-Returns all 8 intents with descriptions, required params, and defaults.
 
 ### POST /ask — run an intent
 
@@ -206,3 +226,14 @@ All `/ask` responses follow the same shape:
 | `unmet_needs` | Q17 open-ended verbatims with keyword/segment filters |
 | `target_list` | Anonymised respondent profiles with high purchase intent |
 | `white_space` | Not-answered attribute rates — unclaimed perception space |
+
+---
+
+## Context
+
+This project was built as part of a broader effort to turn survey data into a reusable “analysis layer” for marketing, strategy, and thought leadership work.
+
+It’s designed to support:
+- internal analysis
+- executive narratives
+- campaign and content development
