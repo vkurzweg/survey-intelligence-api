@@ -1,0 +1,72 @@
+brand,tier,count
+IBM Consulting,low_effort,71
+ServiceNow,moderate,88
+Tata Consultancy Services (TCS),substantive,18
+Amazon Web Services (AWS),moderate,178
+ServiceNow,single_word,20
+Tata Consultancy Services (TCS),non_response,1
+ServiceNow,non_response,1
+ServiceNow,substantive,18
+Amazon Web Services (AWS),single_word,25
+Amazon Web Services (AWS),low_effort,66
+Microsoft (Azure & Copilot),low_effort,69
+Google (Cloud & Gemini),moderate,146
+Accenture,moderate,98
+Microsoft (Azure & Copilot),substantive,57
+IBM Consulting,moderate,151
+Infosys,substantive,30
+Amazon Web Services (AWS),substantive,42
+HCL Technologies,substantive,20
+Microsoft (Azure & Copilot),moderate,140
+Infosys,low_effort,31
+Cognizant,low_effort,74
+Tata Consultancy Services (TCS),moderate,69
+EY,single_word,21
+Cognizant,moderate,172
+Cognizant,non_response,1
+Capgemini,low_effort,33
+Accenture,non_response,1
+McKinsey & Company,substantive,21
+Infosys,moderate,67
+ServiceNow,low_effort,48
+Wipro,low_effort,26
+Microsoft (Azure & Copilot),single_word,30
+Accenture,substantive,35
+DXC Technology,substantive,12
+HCL Technologies,single_word,15
+HCL Technologies,moderate,62
+Google (Cloud & Gemini),single_word,28
+Accenture,low_effort,45
+EY,substantive,41
+IBM Consulting,substantive,49
+Wipro,moderate,72
+Google (Cloud & Gemini),substantive,39
+Capgemini,substantive,22
+Infosys,single_word,21
+Deloitte,moderate,97
+Deloitte,low_effort,60
+Tata Consultancy Services (TCS),low_effort,29
+Deloitte,substantive,35
+Wipro,single_word,8
+Google (Cloud & Gemini),low_effort,55
+EY,low_effort,58
+HCL Technologies,low_effort,23
+Wipro,substantive,13
+EY,moderate,136
+Accenture,single_word,33
+Cognizant,single_word,43
+Capgemini,moderate,64
+Infosys,non_response,1
+Deloitte,single_word,18
+Capgemini,single_word,15
+DXC Technology,low_effort,30
+DXC Technology,single_word,18
+Amazon Web Services (AWS),non_response,1
+McKinsey & Company,moderate,100
+McKinsey & Company,single_word,22
+IBM Consulting,single_word,26
+DXC Technology,moderate,42
+EY,non_response,1
+Cognizant,substantive,43
+McKinsey & Company,low_effort,43
+Tata Consultancy Services (TCS),single_word,15

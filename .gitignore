@@ -22,3 +22,4 @@ venv/
 
 # Large data files — load from MongoDB or external storage
 data/respondents.json
+.claude/
