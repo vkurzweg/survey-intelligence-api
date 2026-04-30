@@ -245,6 +245,14 @@ def performance_trajectory(params: dict) -> list:
             ]},
         }},
         {"$sort": {"momentum": -1}},
+        {"$project": {
+            "_id": 0,
+            "brand": "$_id",
+            "n": 1,
+            "avg_rating_now": 1,
+            "avg_rating_future": 1,
+            "momentum": 1,
+        }},
     ]
     return pipeline
 

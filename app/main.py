@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from typing import Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
@@ -44,7 +45,7 @@ app.add_middleware(
 
 class AskRequest(BaseModel):
     intent: str
-    params: dict | None = None
+    params: Optional[dict] = None
 
 
 # ── Routes ─────────────────────────────────────────────────────────────────────
@@ -90,7 +91,7 @@ def ask_post(body: AskRequest):
 @app.get("/ask")
 def ask_get(
     intent: str = Query(..., description="Intent ID"),
-    params: str | None = Query(None, description="JSON-encoded params object"),
+    params: Optional[str] = Query(None, description="JSON-encoded params object"),
 ):
     try:
         parsed_params = json.loads(params) if params else None
@@ -101,7 +102,7 @@ def ask_get(
 
 # ── Shared handler ─────────────────────────────────────────────────────────────
 
-def _run_ask(intent_id: str, params: dict | None) -> dict:
+def _run_ask(intent_id: str, params: Optional[dict]) -> dict:
     try:
         return ask(intent_id, params, app.state.db)
     except UnknownIntentError as e:
